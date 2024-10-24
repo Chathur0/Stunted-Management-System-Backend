@@ -1,6 +1,8 @@
 package org.example.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.example.entity.StudentEntity;
 import org.example.model.Student;
 import org.example.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +16,14 @@ import java.util.List;
 public class StudentController {
     @Autowired
     StudentService studentService;
+    @Autowired
+    ObjectMapper mapper;
 
     @PostMapping("/student")
-    public void persist(@RequestBody Student student) {
-        studentService.persist(student);
+    public StudentEntity persist(@RequestBody Student student) {
+        return studentService.persist(student);
     }
+
     @GetMapping("/student")
     public List<Student> getAllStudent(){
         return studentService.getAllStudent();
@@ -31,4 +36,9 @@ public class StudentController {
     public void deleteStudent(@PathVariable Integer id){
         studentService.deleteStudent(id);
     }
+    @GetMapping("/student/{id}")
+    public Student getStudent(@PathVariable Integer id){
+        return studentService.getStudent(id);
+    }
+
 }

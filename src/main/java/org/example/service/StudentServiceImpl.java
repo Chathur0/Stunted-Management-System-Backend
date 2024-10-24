@@ -7,8 +7,7 @@ import org.example.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -19,18 +18,16 @@ public class StudentServiceImpl implements StudentService {
     ObjectMapper mapper;
 
     @Override
-    public void persist(Student student) {
-        StudentEntity save = studentRepository.save(
+    public StudentEntity persist(Student student) {
+        return studentRepository.save(
                 mapper.convertValue(student, StudentEntity.class)
         );
-        System.out.println(save);
     }
 
     @Override
     public List<Student> getAllStudent() {
-        Iterable<StudentEntity> all = studentRepository.findAll();
         List<Student> allStudent = new ArrayList<>();
-        all.forEach(studentEntity -> allStudent.add(
+        studentRepository.findAll().forEach(studentEntity -> allStudent.add(
                 mapper.convertValue(studentEntity, Student.class)
         ));
         return allStudent;
@@ -38,14 +35,21 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void updateCustomer(Student student) {
-        StudentEntity save = studentRepository.save(
+        studentRepository.save(
                 mapper.convertValue(student, StudentEntity.class)
         );
-        System.out.println(save);
     }
 
     @Override
     public void deleteStudent(Integer id) {
         studentRepository.deleteById(id);
+    }
+
+    @Override
+    public Student getStudent(Integer id) {
+        return mapper.convertValue(
+                studentRepository.findById(id),
+                Student.class
+        );
     }
 }
